@@ -4,45 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Películas y Series Populares</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"> <!-- Vincula el archivo CSS externo -->
 </head>
 <body>
   <header>
-    <h1>Películas y Series Populares</h1>
-    <nav>
-      <button id="movies-tab" class="active-tab">Películas</button>
-      <button id="series-tab">Series</button>
-    </nav>
     <div class="search-bar">
-      <input type="text" id="search-input" placeholder="Buscar...">
-      <button id="search-button">Buscar</button>
+      <input type="text" placeholder="Buscar...">
+      <button>Buscar</button>
     </div>
   </header>
+
   <main>
-    <div id="content-container" class="content-container">
-      <div id="movies-container" class="movies-container"></div>
-      <div id="series-container" class="movies-container hidden"></div>
-    </div>
-    <div class="pagination">
-      <button id="prev-page" disabled>Anterior</button>
-      <button id="next-page">Siguiente</button>
+    <div class="container">
+      <!-- Ejemplo de Tarjetas -->
+      <div class="card">
+        <img src="https://via.placeholder.com/150" alt="Película">
+        <h3>Absolution</h3>
+        <p>Un curtido y peligroso gangster (Liam Neeson) descubre que...</p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/150" alt="Película">
+        <h3>Robot Salvaje</h3>
+        <p>El épico viaje de un robot que naufraga en una isla deshabitada...</p>
+      </div>
+      <div class="card">
+        <img src="https://via.placeholder.com/150" alt="Película">
+        <h3>Armor</h3>
+        <p>Acción, aventura y suspenso en un mundo futurista...</p>
+      </div>
     </div>
   </main>
-
-  <!-- Modal para mostrar los detalles -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <span id="close-modal" class="close">&times;</span>
-      <div id="movie-details"></div>
-    </div>
-  </div>
-
-  <footer>
-    <p>Datos proporcionados por <a href="https://www.themoviedb.org/" target="_blank">TMDb</a></p>
-  </footer>
-  <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
