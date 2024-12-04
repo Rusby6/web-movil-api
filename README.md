@@ -23,3 +23,8 @@ tiempo y un poco de paciencia, nada mas.
 Luego el otro problema era que se ajustara bien a la vista del movil. Para solucionarlo busqué informacion en internet
 y encontre que tenia que ponerle al css la funcion de ".movies-container". Esto lo que hace es que 
 permite que los elementos se adapten a diferentes tamaños de pantalla.
+
+PREGUNTA 3
+Ponte una nota del 1 al 10, explica por qué te la pones y qué crees que podrías mejorar.
+Personalmente creo que para un web que tiene informacion de peliculas y series no creo que haya algo mas que se pueda añadir.
+Por lo que minimo me pondria un notable.
