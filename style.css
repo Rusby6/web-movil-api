@@ -1,3 +1,4 @@
+/* Estilos generales */
 * {
   margin: 0;
   padding: 0;
@@ -6,15 +7,15 @@
 
 body {
   font-family: 'Arial', sans-serif;
-  background-color: #121212; /* Fondo oscuro para un estilo moderno */
-  color: #f4f4f4; /* Texto claro */
+  background-color: #121212;
+  color: #f4f4f4;
   line-height: 1.6;
   margin: 0;
 }
 
 /* Encabezado */
 header {
-  background-color: #900C3F; /* Rojo intenso */
+  background-color: #900C3F;
   color: white;
   text-align: center;
   padding: 1rem 0;
@@ -29,8 +30,9 @@ header h1 {
 nav {
   display: flex;
   justify-content: center;
-  margin: 10px 0;
+  flex-wrap: wrap;
   gap: 10px;
+  margin: 10px 0;
 }
 
 nav button {
@@ -54,12 +56,15 @@ nav button:hover:not(.active-tab) {
 
 .search-bar {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  gap: 10px;
   margin: 1rem 0;
 }
 
 .search-bar input {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   padding: 10px;
   font-size: 1rem;
   border: none;
@@ -86,15 +91,16 @@ nav button:hover:not(.active-tab) {
 .content-container {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .movies-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
   padding: 20px;
+  width: 100%;
   max-width: 1200px;
-  margin: 0 auto;
 }
 
 .hidden {
@@ -122,14 +128,14 @@ nav button:hover:not(.active-tab) {
 }
 
 .movie h3 {
-  font-size: 1.2rem;
+  font-size: 1rem;
   margin: 0.5rem;
   color: #ffab00;
   text-align: center;
 }
 
 .movie p {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   margin: 0.5rem;
   text-align: center;
   color: #bdbdbd;
@@ -141,6 +147,7 @@ nav button:hover:not(.active-tab) {
   justify-content: center;
   gap: 10px;
   margin: 20px;
+  flex-wrap: wrap;
 }
 
 .pagination button {
@@ -230,6 +237,27 @@ footer a:hover {
 .close:hover {
   color: #ff5722;
 }
+
+/* Media Queries */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-bar input {
+    width: 90%;
+  }
+
+  .movies-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .pagination button {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+}
+
 
   
 
