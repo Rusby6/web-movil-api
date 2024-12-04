@@ -11,43 +11,46 @@ body {
   color: #f4f4f4;
   line-height: 1.6;
   margin: 0;
+  overflow-x: hidden;
 }
 
 /* Encabezado */
 header {
-  background-color: #900C3F;
+  background: linear-gradient(90deg, #900C3F, #ff5722);
   color: white;
   text-align: center;
-  padding: 1rem 0;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  padding: 1.5rem 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 header h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  font-weight: bold;
 }
 
 nav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 10px 0;
+  gap: 15px;
+  margin: 15px 0;
 }
 
 nav button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 1rem;
   background-color: #900C3F;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 nav button.active-tab {
   background-color: #ff5722;
+  transform: scale(1.1);
 }
 
 nav button:hover:not(.active-tab) {
@@ -64,8 +67,8 @@ nav button:hover:not(.active-tab) {
 
 .search-bar input {
   width: 100%;
-  max-width: 300px;
-  padding: 10px;
+  max-width: 400px;
+  padding: 12px;
   font-size: 1rem;
   border: none;
   border-radius: 5px 0 0 5px;
@@ -73,7 +76,7 @@ nav button:hover:not(.active-tab) {
 }
 
 .search-bar button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   font-size: 1rem;
   border: none;
   background-color: #283593;
@@ -92,15 +95,16 @@ nav button:hover:not(.active-tab) {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin: 20px auto;
+  max-width: 1200px;
 }
 
 .movies-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
   padding: 20px;
   width: 100%;
-  max-width: 1200px;
 }
 
 .hidden {
@@ -110,15 +114,15 @@ nav button:hover:not(.active-tab) {
 /* Tarjetas de películas y series */
 .movie {
   background: #1e1e1e;
-  border-radius: 8px;
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .movie:hover {
   transform: translateY(-10px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
 .movie img {
@@ -128,14 +132,14 @@ nav button:hover:not(.active-tab) {
 }
 
 .movie h3 {
-  font-size: 1rem;
-  margin: 0.5rem;
+  font-size: 1.2rem;
+  margin: 0.8rem;
   color: #ffab00;
   text-align: center;
 }
 
 .movie p {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   margin: 0.5rem;
   text-align: center;
   color: #bdbdbd;
@@ -145,18 +149,18 @@ nav button:hover:not(.active-tab) {
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 10px;
-  margin: 20px;
+  gap: 15px;
+  margin: 30px 0;
   flex-wrap: wrap;
 }
 
 .pagination button {
-  padding: 10px 15px;
+  padding: 12px 20px;
   font-size: 1rem;
   border: none;
   background-color: #b30000;
   color: white;
-  border-radius: 5px;
+  border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -174,9 +178,10 @@ nav button:hover:not(.active-tab) {
 footer {
   text-align: center;
   padding: 1rem;
-  background-color: #900C3F;
+  background: linear-gradient(90deg, #900C3F, #ff5722);
   color: white;
   margin-top: 20px;
+  font-size: 0.9rem;
 }
 
 footer a {
@@ -200,6 +205,7 @@ footer a:hover {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow-y: auto;
   transition: opacity 0.3s ease;
 }
 
@@ -211,24 +217,75 @@ footer a:hover {
 .modal-content {
   background: #1e1e1e;
   color: #f4f4f4;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 600px;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 700px;
   width: 90%;
   position: relative;
   text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .modal-content img {
   max-width: 100%;
   border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #ffab00;
+}
+
+.modal-content p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.modal-content .actors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.actor {
+  text-align: center;
+  color: white;
+}
+
+.actor img {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.actor h4 {
+  margin: 10px 0 5px;
+  font-size: 0.9rem;
+}
+
+.actor p {
+  font-size: 0.8rem;
+  color: #bdbdbd;
+}
+
+iframe {
+  width: 100%;
+  height: 315px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 20px;
 }
 
 .close {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   color: #f4f4f4;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -241,7 +298,7 @@ footer a:hover {
 /* Media Queries */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   .search-bar input {
@@ -249,14 +306,12 @@ footer a:hover {
   }
 
   .movies-container {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 
   .pagination button {
-    font-size: 0.9rem;
-    padding: 8px 12px;
-  }
-}
+    font-size: 0.
+
 
 
 
