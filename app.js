@@ -91,21 +91,43 @@ function createContentCard(content, titleKey) {
     <p>⭐ ${content.vote_average}</p>
     <p>${content.overview ? content.overview.substring(0, 100) + '...' : ''}</p>
   `;
-  contentElement.addEventListener('click', () => openModal(content, titleKey));
+  contentElement.addEventListener('click', () => openModal(content.id, titleKey));
   return contentElement;
 }
 
 // Manejo del modal para contenido (película o serie)
-async function openModal(content, titleKey) {
-  movieDetails.innerHTML = `
-    <h2>${content[titleKey]}</h2>
-    <img src="${IMAGE_BASE_URL}${content.poster_path}" alt="${content[titleKey]}">
-    <p><strong>Fecha de lanzamiento:</strong> ${content.release_date || content.first_air_date || 'No disponible'}</p>
-    <p><strong>Calificación:</strong> ⭐ ${content.vote_average}</p>
-    <p><strong>Lenguaje original:</strong> ${content.original_language.toUpperCase()}</p>
-    <p><strong>Resumen:</strong> ${content.overview || 'No disponible'}</p>
-  `;
-  modal.classList.remove('hidden');
+async function openModal(contentId, titleKey) {
+  try {
+    const type = currentContent === 'movies' ? 'movie' : 'tv';
+    const detailsResponse = await fetch(`${BASE_URL}/${type}/${contentId}?api_key=${API_KEY}&language=es`);
+    const detailsData = await detailsResponse.json();
+
+    const creditsResponse = await fetch(`${BASE_URL}/${type}/${contentId}/credits?api_key=${API_KEY}&language=es`);
+    const creditsData = await creditsResponse.json();
+
+    const videosResponse = await fetch(`${BASE_URL}/${type}/${contentId}/videos?api_key=${API_KEY}&language=es`);
+    const videosData = await videosResponse.json();
+
+    const trailer = videosData.results.find((video) => video.type === 'Trailer' && video.site === 'YouTube');
+
+    movieDetails.innerHTML = `
+      <h2>${detailsData[titleKey]}</h2>
+      <img src="${IMAGE_BASE_URL}${detailsData.poster_path}" alt="${detailsData[titleKey]}">
+      <p><strong>Fecha de lanzamiento:</strong> ${detailsData.release_date || detailsData.first_air_date || 'No disponible'}</p>
+      <p><strong>Calificación:</strong> ⭐ ${detailsData.vote_average}</p>
+      <p><strong>Lenguaje original:</strong> ${detailsData.original_language.toUpperCase()}</p>
+      <p><strong>Resumen:</strong> ${detailsData.overview || 'No disponible'}</p>
+      <h3>Elenco:</h3>
+      <ul>
+        ${creditsData.cast.slice(0, 10).map((actor) => `<li>${actor.name} como ${actor.character || 'N/A'}</li>`).join('')}
+      </ul>
+      ${trailer ? `<h3>Trailer:</h3><iframe width="100%" height="315" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>` : ''}
+    `;
+
+    modal.classList.remove('hidden');
+  } catch (error) {
+    console.error('Error al cargar los detalles del contenido:', error);
+  }
 }
 
 // Eventos de búsqueda y navegación
