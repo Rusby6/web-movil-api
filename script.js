@@ -3,10 +3,11 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w200';
 let currentPage = 1;
 let currentQuery = '';
-let currentContent = 'movies'; // Indica si estamos en "movies" o "series"
+let currentContent = 'movies'; // Indica si estamos en "movies", "series", o "cinema"
 
 const moviesContainer = document.getElementById('movies-container');
 const seriesContainer = document.getElementById('series-container');
+const cinemaContainer = document.getElementById('cinema-container');
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 const prevPageButton = document.getElementById('prev-page');
@@ -16,10 +17,12 @@ const movieDetails = document.getElementById('movie-details');
 const closeModalButton = document.getElementById('close-modal');
 const moviesTab = document.getElementById('movies-tab');
 const seriesTab = document.getElementById('series-tab');
+const cinemaTab = document.getElementById('cinema-tab');
 
-// Cambiar entre "Películas" y "Series"
+// Cambiar entre "Películas", "Series", y "En Cines"
 moviesTab.addEventListener('click', () => switchContent('movies'));
 seriesTab.addEventListener('click', () => switchContent('series'));
+cinemaTab.addEventListener('click', () => switchContent('cinema'));
 
 function switchContent(contentType) {
   currentContent = contentType;
@@ -27,34 +30,37 @@ function switchContent(contentType) {
   currentQuery = '';
   moviesTab.classList.toggle('active-tab', contentType === 'movies');
   seriesTab.classList.toggle('active-tab', contentType === 'series');
+  cinemaTab.classList.toggle('active-tab', contentType === 'cinema');
   moviesContainer.classList.toggle('hidden', contentType !== 'movies');
   seriesContainer.classList.toggle('hidden', contentType !== 'series');
+  cinemaContainer.classList.toggle('hidden', contentType !== 'cinema');
   fetchContent();
 }
 
-// Obtener contenido basado en el tipo actual (películas o series)
+// Obtener contenido basado en el tipo actual
 async function fetchContent() {
-  const type = currentContent === 'movies' ? 'movie' : 'tv';
-  const endpoint = `${BASE_URL}/${type}/popular?api_key=${API_KEY}&language=es&page=${currentPage}`;
+  let endpoint;
+  if (currentContent === 'movies') {
+    endpoint = `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=es&page=${currentPage}`;
+  } else if (currentContent === 'series') {
+    endpoint = `${BASE_URL}/tv/popular?api_key=${API_KEY}&language=es&page=${currentPage}`;
+  } else if (currentContent === 'cinema') {
+    endpoint = `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=es&page=${currentPage}`;
+  }
   await fetchAndDisplayContent(endpoint);
 }
 
-// Buscar contenido
-async function searchContent(query, page = 1) {
-  const type = currentContent === 'movies' ? 'movie' : 'tv';
-  const endpoint = `${BASE_URL}/search/${type}?api_key=${API_KEY}&language=es&query=${query}&page=${page}`;
-  await fetchAndDisplayContent(endpoint);
-}
-
-// Función genérica para obtener y mostrar contenido
+// Mostrar contenido basado en el tipo
 async function fetchAndDisplayContent(endpoint) {
   try {
     const response = await fetch(endpoint);
     const data = await response.json();
     if (currentContent === 'movies') {
       displayMovies(data.results);
-    } else {
+    } else if (currentContent === 'series') {
       displaySeries(data.results);
+    } else if (currentContent === 'cinema') {
+      displayCinema(data.results);
     }
     updatePaginationButtons(data.page, data.total_pages);
   } catch (error) {
@@ -75,12 +81,21 @@ function displayMovies(movies) {
 function displaySeries(series) {
   seriesContainer.innerHTML = '';
   series.forEach((serie) => {
-    const serieElement = createContentCard(serie, 'name');
-    seriesContainer.appendChild(serieElement);
+    const seriesElement = createContentCard(serie, 'name');
+    seriesContainer.appendChild(seriesElement);
   });
 }
 
-// Crear una tarjeta de contenido (película o serie)
+// Mostrar películas en cines
+function displayCinema(movies) {
+  cinemaContainer.innerHTML = '';
+  movies.forEach((movie) => {
+    const movieElement = createContentCard(movie, 'title');
+    cinemaContainer.appendChild(movieElement);
+  });
+}
+
+// Crear tarjeta de contenido
 function createContentCard(content, titleKey) {
   const contentElement = document.createElement('div');
   contentElement.classList.add('movie');
@@ -95,42 +110,35 @@ function createContentCard(content, titleKey) {
   return contentElement;
 }
 
-// Manejo del modal para contenido (película o serie)
-async function openModal(contentId, titleKey) {
+// Abrir modal
+async function openModal(id, type) {
+  const endpoint = `${BASE_URL}/${type === 'title' ? 'movie' : 'tv'}/${id}?api_key=${API_KEY}&language=es`;
   try {
-    const type = currentContent === 'movies' ? 'movie' : 'tv';
-    const detailsResponse = await fetch(`${BASE_URL}/${type}/${contentId}?api_key=${API_KEY}&language=es`);
-    const detailsData = await detailsResponse.json();
-
-    const creditsResponse = await fetch(`${BASE_URL}/${type}/${contentId}/credits?api_key=${API_KEY}&language=es`);
-    const creditsData = await creditsResponse.json();
-
-    const videosResponse = await fetch(`${BASE_URL}/${type}/${contentId}/videos?api_key=${API_KEY}&language=es`);
-    const videosData = await videosResponse.json();
-
-    const trailer = videosData.results.find((video) => video.type === 'Trailer' && video.site === 'YouTube');
-
+    const response = await fetch(endpoint);
+    const data = await response.json();
     movieDetails.innerHTML = `
-      <h2>${detailsData[titleKey]}</h2>
-      <img src="${IMAGE_BASE_URL}${detailsData.poster_path}" alt="${detailsData[titleKey]}">
-      <p><strong>Fecha de lanzamiento:</strong> ${detailsData.release_date || detailsData.first_air_date || 'No disponible'}</p>
-      <p><strong>Calificación:</strong> ⭐ ${detailsData.vote_average}</p>
-      <p><strong>Lenguaje original:</strong> ${detailsData.original_language.toUpperCase()}</p>
-      <p><strong>Resumen:</strong> ${detailsData.overview || 'No disponible'}</p>
-      <h3>Elenco:</h3>
-      <ul>
-        ${creditsData.cast.slice(0, 10).map((actor) => `<li>${actor.name} como ${actor.character || 'N/A'}</li>`).join('')}
-      </ul>
-      ${trailer ? `<h3>Trailer:</h3><iframe width="100%" height="315" src="https://www.youtube.com/embed/${trailer.key}" frameborder="0" allowfullscreen></iframe>` : ''}
+      <h2>${data.title || data.name}</h2>
+      <img src="${IMAGE_BASE_URL}${data.poster_path}" alt="${data.title || data.name}">
+      <p>${data.overview}</p>
     `;
-
     modal.classList.remove('hidden');
   } catch (error) {
-    console.error('Error al cargar los detalles del contenido:', error);
+    console.error('Error al obtener los detalles:', error);
   }
 }
 
-// Eventos de búsqueda y navegación
+// Cerrar modal
+closeModalButton.addEventListener('click', () => {
+  modal.classList.add('hidden');
+});
+
+// Actualizar botones de paginación
+function updatePaginationButtons(page, totalPages) {
+  prevPageButton.disabled = page === 1;
+  nextPageButton.disabled = page === totalPages;
+}
+
+// Manejo de búsqueda
 searchButton.addEventListener('click', () => {
   currentQuery = searchInput.value.trim();
   currentPage = 1;
@@ -141,26 +149,22 @@ searchButton.addEventListener('click', () => {
   }
 });
 
+// Buscar contenido
+async function searchContent(query, page) {
+  const endpoint = `${BASE_URL}/search/${currentContent === 'movies' ? 'movie' : 'tv'}?api_key=${API_KEY}&language=es&query=${query}&page=${page}`;
+  await fetchAndDisplayContent(endpoint);
+}
+
+// Eventos de paginación
 prevPageButton.addEventListener('click', () => {
   currentPage--;
-  if (currentQuery) {
-    searchContent(currentQuery, currentPage);
-  } else {
-    fetchContent();
-  }
+  fetchContent();
 });
 
 nextPageButton.addEventListener('click', () => {
   currentPage++;
-  if (currentQuery) {
-    searchContent(currentQuery, currentPage);
-  } else {
-    fetchContent();
-  }
+  fetchContent();
 });
 
-// Cierre del modal
-closeModalButton.addEventListener('click', () => modal.classList.add('hidden'));
-
-// Cargar contenido inicial
+// Inicializar
 fetchContent();
