@@ -8,6 +8,8 @@ Al darle click a una pelicula o serie podemos ver un poco deinformacion sobre es
 -La calificacion que recibe segun TMDb
 -La fecha en que se estreno o va a estrenarse
 -El lenguaje original
+-Aparece el elenco de actores/actrices
+-En algunas se puede ver el trailer de la pelicula
 
 
 PREGUNTA 1
