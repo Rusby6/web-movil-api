@@ -29,4 +29,4 @@ permite que los elementos se adapten a diferentes tamaños de pantalla.
 PREGUNTA 3
 Ponte una nota del 1 al 10, explica por qué te la pones y qué crees que podrías mejorar.
 Personalmente creo que para un web que tiene informacion de peliculas y series no creo que haya algo mas que se pueda añadir.
-Por lo que minimo me pondria un notable.
+Por lo que minimo me pondria un sobresaliente, y si no notable.
